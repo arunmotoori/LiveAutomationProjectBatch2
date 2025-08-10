@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="11" total="12" passed="1" failed="0" skipped="0">
+<testng-results ignored="17" total="18" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-07-27T12:08:53 IST" name="Default suite" finished-at="2025-07-27T12:09:01 IST" duration-ms="8050">
+  <suite started-at="2025-08-10T12:35:48 IST" name="Default suite" finished-at="2025-08-10T12:35:59 IST" duration-ms="11381">
     <groups>
     </groups>
-    <test started-at="2025-07-27T12:08:53 IST" name="Default test" finished-at="2025-07-27T12:09:01 IST" duration-ms="8050">
+    <test started-at="2025-08-10T12:35:48 IST" name="Default test" finished-at="2025-08-10T12:35:59 IST" duration-ms="11381">
       <class name="tests.ProductCompare">
-        <test-method signature="verifyBreadCrumbOfProductComparePage()[pri:12, instance:tests.ProductCompare@1ed4ae0f]" started-at="2025-07-27T12:08:53 IST" name="verifyBreadCrumbOfProductComparePage" finished-at="2025-07-27T12:09:01 IST" duration-ms="7956" status="PASS">
+        <test-method signature="verifyProductComparisonPageWhenOnlyFourProductsAreAddedForComparison()[pri:18, instance:tests.ProductCompare@6e6f2380]" started-at="2025-08-10T12:35:48 IST" name="verifyProductComparisonPageWhenOnlyFourProductsAreAddedForComparison" finished-at="2025-08-10T12:35:59 IST" duration-ms="11310" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- verifyBreadCrumbOfProductComparePage -->
+        </test-method> <!-- verifyProductComparisonPageWhenOnlyFourProductsAreAddedForComparison -->
       </class> <!-- tests.ProductCompare -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->

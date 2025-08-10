@@ -5,7 +5,7 @@
     <classes>
       <class name="tests.ProductCompare">
         <methods>
-          <include name="verifyAddingProductForComparisonFromRelatedProductsSection"/>
+          <include name="verifyProductComparisonPageWhenOnlyFourProductsAreAddedForComparison"/>
         </methods>
       </class> <!-- tests.ProductCompare -->
     </classes>
