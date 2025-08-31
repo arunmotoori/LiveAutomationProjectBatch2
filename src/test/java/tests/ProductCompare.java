@@ -1,6 +1,8 @@
 package tests;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -727,6 +729,203 @@ public class ProductCompare {
 		
 	}
 	
+	@Test(priority=19)
+	public void verifyProductComparingIsNotPossibleWithMoreThanFourProducts()  {
+		
+		WebDriver driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.get("https://tutorialsninja.com/demo/");
+		String productName = "iMac";
+		driver.findElement(By.name("search")).sendKeys(productName);
+		driver.findElement(By.cssSelector("button[class='btn btn-default btn-lg']")).click();
+		driver.findElement(By.cssSelector("button[onclick^='compare']")).click();
+		String productNameTwo = "iPhone";
+		driver.findElement(By.name("search")).clear();
+		driver.findElement(By.name("search")).sendKeys(productNameTwo);
+		driver.findElement(By.cssSelector("button[class='btn btn-default btn-lg']")).click();
+		driver.findElement(By.cssSelector("button[onclick^='compare']")).click();
+		String productNameThree = "MacBook Air";
+		driver.findElement(By.name("search")).clear();
+		driver.findElement(By.name("search")).sendKeys(productNameThree);
+		driver.findElement(By.cssSelector("button[class='btn btn-default btn-lg']")).click();
+		driver.findElement(By.cssSelector("button[onclick^='compare']")).click();
+		String productNameFour = "MacBook";
+		driver.findElement(By.name("search")).clear();
+		driver.findElement(By.name("search")).sendKeys(productNameFour);
+		driver.findElement(By.cssSelector("button[class='btn btn-default btn-lg']")).click();
+		driver.findElement(By.cssSelector("button[onclick^='compare']")).click();
+		String productNameFive = "Canon";
+		driver.findElement(By.name("search")).clear();
+		driver.findElement(By.name("search")).sendKeys(productNameFive);
+		driver.findElement(By.cssSelector("button[class='btn btn-default btn-lg']")).click();
+		driver.findElement(By.cssSelector("button[onclick^='compare']")).click();
+		
+		WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(30));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[class='alert alert-success alert-dismissible']")));
+		driver.findElement(By.linkText("product comparison")).click();
+		
+		String actualPageTitle = driver.getTitle();
+		Assert.assertEquals(actualPageTitle,"Product Comparison");
+		
+		int acutalProductCount = driver.findElements(By.xpath("//td[text()='Product']/following-sibling::td")).size();
+		Assert.assertEquals(acutalProductCount,4);
+		
+		driver.quit();
+		
+	}
 	
+	@Test(priority=20)
+	public void verifyAddingProductsToCartFromProductComparsionPage()  {
+		
+		WebDriver driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.get("https://tutorialsninja.com/demo/");
+		String productName = "iMac";
+		driver.findElement(By.name("search")).sendKeys(productName);
+		driver.findElement(By.cssSelector("button[class='btn btn-default btn-lg']")).click();
+		driver.findElement(By.cssSelector("button[onclick^='compare']")).click();
+		
+		WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(30));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[class='alert alert-success alert-dismissible']")));
+		driver.findElement(By.linkText("product comparison")).click();
+		
+		String actualPageTitle = driver.getTitle();
+		Assert.assertEquals(actualPageTitle,"Product Comparison");
+		
+		driver.findElement(By.xpath("//input[@value='Add to Cart']")).click();
+		
+		wait = new WebDriverWait(driver,Duration.ofSeconds(30));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[class='alert alert-success alert-dismissible']")));
+		driver.findElement(By.linkText("shopping cart")).click();
+		
+		actualPageTitle = driver.getTitle();
+		Assert.assertEquals(actualPageTitle,"Shopping Cart");
+		
+		Assert.assertEquals(driver.findElement(By.xpath("(//div[@id='content']//a)[2]")).getText(), "iMac");
+		
+		String productNameTwo = "iPhone";
+		driver.findElement(By.name("search")).clear();
+		driver.findElement(By.name("search")).sendKeys(productNameTwo);
+		driver.findElement(By.cssSelector("button[class='btn btn-default btn-lg']")).click();
+		driver.findElement(By.cssSelector("button[onclick^='compare']")).click();
+		String productNameThree = "MacBook Air";
+		driver.findElement(By.name("search")).clear();
+		driver.findElement(By.name("search")).sendKeys(productNameThree);
+		driver.findElement(By.cssSelector("button[class='btn btn-default btn-lg']")).click();
+		driver.findElement(By.cssSelector("button[onclick^='compare']")).click();
+		String productNameFour = "MacBook";
+		driver.findElement(By.name("search")).clear();
+		driver.findElement(By.name("search")).sendKeys(productNameFour);
+		driver.findElement(By.cssSelector("button[class='btn btn-default btn-lg']")).click();
+		driver.findElement(By.cssSelector("button[onclick^='compare']")).click();
+		
+		wait = new WebDriverWait(driver,Duration.ofSeconds(30));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[class='alert alert-success alert-dismissible']")));
+		driver.findElement(By.linkText("product comparison")).click();
+		
+		for(int i=2;i<=4;i++) {
+			String xpathText = "(//input[@value='Add to Cart'])["+i+"]";
+			driver.findElement(By.xpath(xpathText)).click();
+		}
+		
+		wait = new WebDriverWait(driver,Duration.ofSeconds(30));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[class='alert alert-success alert-dismissible']")));
+		driver.findElement(By.linkText("shopping cart")).click();
+	
+		List<WebElement> products = driver.findElements(By.xpath("//form//table/tbody/tr/td[2]/a"));
+		
+		List<String> productNames = new ArrayList<String>();
+		
+		for(WebElement product : products) {
+			
+			productName = product.getText();
+			productNames.add(productName);
+			
+		}
+		
+		Assert.assertTrue(productNames.contains(productName));
+		Assert.assertTrue(productNames.contains(productNameTwo));
+		Assert.assertTrue(productNames.contains(productNameThree));
+		Assert.assertTrue(productNames.contains(productNameFour));
+		
+		driver.quit();
+		
+	}
+	
+	@Test(priority=21)
+	public void verifyRemovingProductsFromProductComparsionPage()  {
+		
+		WebDriver driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.get("https://tutorialsninja.com/demo/");
+		String productName = "iMac";
+		driver.findElement(By.name("search")).sendKeys(productName);
+		driver.findElement(By.cssSelector("button[class='btn btn-default btn-lg']")).click();
+		driver.findElement(By.cssSelector("button[onclick^='compare']")).click();
+		String productNameTwo = "iPhone";
+		driver.findElement(By.name("search")).clear();
+		driver.findElement(By.name("search")).sendKeys(productNameTwo);
+		driver.findElement(By.cssSelector("button[class='btn btn-default btn-lg']")).click();
+		driver.findElement(By.cssSelector("button[onclick^='compare']")).click();
+		String productNameThree = "MacBook Air";
+		driver.findElement(By.name("search")).clear();
+		driver.findElement(By.name("search")).sendKeys(productNameThree);
+		driver.findElement(By.cssSelector("button[class='btn btn-default btn-lg']")).click();
+		driver.findElement(By.cssSelector("button[onclick^='compare']")).click();
+		String productNameFour = "MacBook";
+		driver.findElement(By.name("search")).clear();
+		driver.findElement(By.name("search")).sendKeys(productNameFour);
+		driver.findElement(By.cssSelector("button[class='btn btn-default btn-lg']")).click();
+		driver.findElement(By.cssSelector("button[onclick^='compare']")).click();
+		
+		WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(30));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[class='alert alert-success alert-dismissible']")));
+		driver.findElement(By.linkText("product comparison")).click();
+		
+		String actualPageTitle = driver.getTitle();
+		Assert.assertEquals(actualPageTitle,"Product Comparison");
+		
+		int acutalProductCount = driver.findElements(By.xpath("//td[text()='Product']/following-sibling::td")).size();
+		Assert.assertEquals(acutalProductCount,4);
+		
+		List<WebElement> removeButtons = driver.findElements(By.xpath("//a[text()='Remove']"));
+		
+		for(int i=1;i<=removeButtons.size();i++) {
+			
+			driver.findElement(By.xpath("//a[text()='Remove']")).click();
+			
+		}
+		
+		Assert.assertTrue(driver.findElement(By.xpath("//div[@id='content']/p[text()='You have not chosen any products to compare.']")).isDisplayed());
+		
+		driver.quit();
+	}
+	
+	@Test(priority=22)
+	public void verifyPageTitlePageHeadingPageURLOfProductComparisonPage()  {
+		
+		WebDriver driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.get("https://tutorialsninja.com/demo/");
+		String productName = "iMac";
+		driver.findElement(By.name("search")).sendKeys(productName);
+		driver.findElement(By.cssSelector("button[class='btn btn-default btn-lg']")).click();
+		driver.findElement(By.cssSelector("button[onclick^='compare']")).click();
+		
+		WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(30));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[class='alert alert-success alert-dismissible']")));
+		driver.findElement(By.linkText("product comparison")).click();
+		
+		String actualPageTitle = driver.getTitle();
+		Assert.assertEquals(actualPageTitle,"Product Comparison");
+		
+		Assert.assertEquals(driver.getTitle(),"Product Comparison");
+		Assert.assertEquals(driver.getCurrentUrl(),"https://tutorialsninja.com/demo/index.php?route=product/compare");
+		Assert.assertEquals(driver.findElement(By.xpath("//div[@id='content']/h1")).getText(),"Product Comparison");
+		
+		driver.quit();
+		
+	}
+		
 
 }
