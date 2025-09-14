@@ -3,11 +3,11 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="tests.ProductCompare">
+      <class name="tests.ProductDisplayPage">
         <methods>
-          <include name="verifyPageTitlePageHeadingPageURLOfProductComparisonPage"/>
+          <include name="verifyProductQuantityInProductDisplayPage"/>
         </methods>
-      </class> <!-- tests.ProductCompare -->
+      </class> <!-- tests.ProductDisplayPage -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

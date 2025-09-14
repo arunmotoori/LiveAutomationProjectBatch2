@@ -1,17 +1,28 @@
 package tests;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import ru.yandex.qatools.ashot.comparison.ImageDiff;
+import ru.yandex.qatools.ashot.comparison.ImageDiffer;
 
 public class ProductCompare {
 	
@@ -922,6 +933,54 @@ public class ProductCompare {
 		Assert.assertEquals(driver.getTitle(),"Product Comparison");
 		Assert.assertEquals(driver.getCurrentUrl(),"https://tutorialsninja.com/demo/index.php?route=product/compare");
 		Assert.assertEquals(driver.findElement(By.xpath("//div[@id='content']/h1")).getText(),"Product Comparison");
+		
+		driver.quit();
+		
+	}
+	
+	@Test(priority = 23)
+	public void verifyUIOfCompareThisProduct() {
+		
+		WebDriver driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.get("https://tutorialsninja.com/demo/");
+		String productName = "iMac";
+		driver.findElement(By.name("search")).sendKeys(productName);
+		driver.findElement(By.cssSelector("button[class='btn btn-default btn-lg']")).click();
+		driver.findElement(By.cssSelector("button[onclick^='compare']")).click();
+		
+		WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(30));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[class='alert alert-success alert-dismissible']")));
+		driver.findElement(By.linkText("product comparison")).click();
+		
+		String actualPageTitle = driver.getTitle();
+		Assert.assertEquals(actualPageTitle,"Product Comparison");
+		
+		TakesScreenshot tsDriver = (TakesScreenshot)driver;
+		File srcFile = tsDriver.getScreenshotAs(OutputType.FILE);
+		try {
+			FileHandler.copy(srcFile, new File(System.getProperty("user.dir")+"\\Screenshots\\ProductComparisionActual.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		BufferedImage bufferedExpectedImage = null;
+		try {
+			bufferedExpectedImage = ImageIO.read(new File(System.getProperty("user.dir")+"\\Screenshots\\ProductComparisionExpected.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		BufferedImage bufferedActualImage = null;
+		try {
+			bufferedActualImage = ImageIO.read(new File(System.getProperty("user.dir")+"\\Screenshots\\ProductComparisionActual.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		ImageDiffer differ = new ImageDiffer();
+		ImageDiff diff = differ.makeDiff(bufferedExpectedImage, bufferedActualImage);
+		
+		Assert.assertTrue(!diff.hasDiff());
 		
 		driver.quit();
 		
